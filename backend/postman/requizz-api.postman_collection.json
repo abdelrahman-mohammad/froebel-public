@@ -1,0 +1,1863 @@
+{
+    "info": {
+        "name": "Froebel",
+        "description": "Froebel API Collection - Learning Platform with Quiz Management",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Health",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/actuator/health",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["actuator", "health"]
+                        },
+                        "description": "Check if the application is running and healthy"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Local Auth",
+                    "item": [
+                        {
+                            "name": "Register",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 200) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('accessToken', jsonData.accessToken);",
+                                            "    pm.environment.set('refreshToken', jsonData.refreshToken);",
+                                            "    console.log('Tokens saved to environment');",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"Password123\",\n    \"displayName\": \"Test User\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/register",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "register"]
+                                },
+                                "description": "Register a new user account. All users are assigned USER role by default."
+                            }
+                        },
+                        {
+                            "name": "Verify Email",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/verify-email?token={{verificationToken}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "verify-email"],
+                                    "query": [
+                                        {
+                                            "key": "token",
+                                            "value": "{{verificationToken}}",
+                                            "description": "Email verification token from console log or email"
+                                        }
+                                    ]
+                                },
+                                "description": "Verify email address using the token sent to user's email"
+                            }
+                        },
+                        {
+                            "name": "Resend Verification Email",
+                            "request": {
+                                "method": "POST",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/resend-verification?email=test@example.com",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "resend-verification"],
+                                    "query": [
+                                        {
+                                            "key": "email",
+                                            "value": "test@example.com",
+                                            "description": "Email address to resend verification to"
+                                        }
+                                    ]
+                                },
+                                "description": "Resend email verification token to the specified email"
+                            }
+                        },
+                        {
+                            "name": "Login",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 200) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('accessToken', jsonData.accessToken);",
+                                            "    pm.environment.set('refreshToken', jsonData.refreshToken);",
+                                            "    console.log('Tokens saved to environment');",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"Password123\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/login",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "login"]
+                                },
+                                "description": "Login with email and password. Email must be verified first."
+                            }
+                        },
+                        {
+                            "name": "Forgot Password",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"email\": \"test@example.com\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/forgot-password",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "forgot-password"]
+                                },
+                                "description": "Request a password reset link to be sent to the email"
+                            }
+                        },
+                        {
+                            "name": "Reset Password",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"token\": \"{{resetToken}}\",\n    \"newPassword\": \"NewPassword123\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/reset-password",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "reset-password"]
+                                },
+                                "description": "Reset password using the token from forgot-password email"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "OAuth2",
+                    "item": [
+                        {
+                            "name": "Google - Start OAuth Flow",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/oauth2/google",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "oauth2", "google"]
+                                },
+                                "description": "Initiates Google OAuth2 flow. Opens this URL in a browser - it will redirect to Google for authentication, then back to the frontend callback with tokens."
+                            }
+                        },
+                        {
+                            "name": "GitHub - Start OAuth Flow",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/oauth2/github",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "oauth2", "github"]
+                                },
+                                "description": "Initiates GitHub OAuth2 flow. Opens this URL in a browser - it will redirect to GitHub for authentication, then back to the frontend callback with tokens."
+                            }
+                        },
+                        {
+                            "name": "Microsoft - Start OAuth Flow",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/oauth2/microsoft",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "oauth2", "microsoft"]
+                                },
+                                "description": "Initiates Microsoft OAuth2 flow. Opens this URL in a browser - it will redirect to Microsoft for authentication, then back to the frontend callback with tokens."
+                            }
+                        },
+                        {
+                            "name": "Google - Callback (Internal)",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/oauth2/callback/google?code=AUTH_CODE&state=STATE",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "oauth2", "callback", "google"],
+                                    "query": [
+                                        {
+                                            "key": "code",
+                                            "value": "AUTH_CODE",
+                                            "description": "Authorization code from Google (provided by Google redirect)"
+                                        },
+                                        {
+                                            "key": "state",
+                                            "value": "STATE",
+                                            "description": "State parameter for CSRF protection (generated by backend)"
+                                        }
+                                    ]
+                                },
+                                "description": "OAuth2 callback endpoint - called by Google after user authorization. Not called directly by frontend. Redirects to frontend with tokens in URL fragment."
+                            }
+                        },
+                        {
+                            "name": "GitHub - Callback (Internal)",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/oauth2/callback/github?code=AUTH_CODE&state=STATE",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "oauth2", "callback", "github"],
+                                    "query": [
+                                        {
+                                            "key": "code",
+                                            "value": "AUTH_CODE",
+                                            "description": "Authorization code from GitHub (provided by GitHub redirect)"
+                                        },
+                                        {
+                                            "key": "state",
+                                            "value": "STATE",
+                                            "description": "State parameter for CSRF protection (generated by backend)"
+                                        }
+                                    ]
+                                },
+                                "description": "OAuth2 callback endpoint - called by GitHub after user authorization. Not called directly by frontend. Redirects to frontend with tokens in URL fragment."
+                            }
+                        },
+                        {
+                            "name": "Microsoft - Callback (Internal)",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/oauth2/callback/microsoft?code=AUTH_CODE&state=STATE",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "oauth2", "callback", "microsoft"],
+                                    "query": [
+                                        {
+                                            "key": "code",
+                                            "value": "AUTH_CODE",
+                                            "description": "Authorization code from Microsoft (provided by Microsoft redirect)"
+                                        },
+                                        {
+                                            "key": "state",
+                                            "value": "STATE",
+                                            "description": "State parameter for CSRF protection (generated by backend)"
+                                        }
+                                    ]
+                                },
+                                "description": "OAuth2 callback endpoint - called by Microsoft after user authorization. Not called directly by frontend. Redirects to frontend with tokens in URL fragment."
+                            }
+                        }
+                    ],
+                    "description": "OAuth2 Social Sign-In endpoints for Google, GitHub, and Microsoft"
+                },
+                {
+                    "name": "Token Management",
+                    "item": [
+                        {
+                            "name": "Refresh Token",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 200) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('accessToken', jsonData.accessToken);",
+                                            "    pm.environment.set('refreshToken', jsonData.refreshToken);",
+                                            "    console.log('Tokens refreshed and saved to environment');",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/refresh",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "refresh"]
+                                },
+                                "description": "Exchange refresh token for new access and refresh tokens. Old refresh token is invalidated."
+                            }
+                        },
+                        {
+                            "name": "Logout",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{accessToken}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/logout",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "logout"]
+                                },
+                                "description": "Logout and invalidate all refresh tokens for the current user"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "User Profile",
+                    "item": [
+                        {
+                            "name": "Get Current User",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 200) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('userId', jsonData.id);",
+                                            "    console.log('User ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{accessToken}}"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/me",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "me"]
+                                },
+                                "description": "Get the currently authenticated user's profile"
+                            }
+                        },
+                        {
+                            "name": "Change Password",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Authorization",
+                                        "value": "Bearer {{accessToken}}"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"currentPassword\": \"Password123\",\n    \"newPassword\": \"NewPassword456\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/auth/change-password",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "auth", "change-password"]
+                                },
+                                "description": "Change password while logged in. Requires current password. Invalidates all refresh tokens."
+                            }
+                        }
+                    ]
+                }
+            ],
+            "description": "Authentication endpoints including local auth, OAuth2, and token management"
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Delete Current User",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/users/me",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "users", "me"]
+                        },
+                        "description": "Delete the currently authenticated user's account"
+                    }
+                },
+                {
+                    "name": "Delete User by ID (Admin)",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/users/{{userId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "users", "{{userId}}"]
+                        },
+                        "description": "Delete a user by ID (Admin only)"
+                    }
+                }
+            ],
+            "description": "User management endpoints"
+        },
+        {
+            "name": "Profile",
+            "item": [
+                {
+                    "name": "Get My Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profile/me",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profile", "me"]
+                        },
+                        "description": "Get the authenticated user's full profile including stats, privacy settings, and all profile fields"
+                    }
+                },
+                {
+                    "name": "Update Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"displayName\": \"John Doe\",\n    \"fullName\": \"Jonathan Doe\",\n    \"bio\": \"Quiz enthusiast and educator\",\n    \"location\": \"New York, USA\",\n    \"website\": \"https://johndoe.com\",\n    \"socialLinks\": {\n        \"twitter\": \"johndoe\",\n        \"github\": \"johndoe\"\n    }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profile/me",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profile", "me"]
+                        },
+                        "description": "Update profile fields. All fields are optional except displayName (2-50 chars required)."
+                    }
+                },
+                {
+                    "name": "Update Privacy Settings",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"profilePublic\": true,\n    \"showEmail\": false,\n    \"showStats\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profile/me/privacy",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profile", "me", "privacy"]
+                        },
+                        "description": "Update privacy settings. profilePublic controls profile visibility, showEmail controls email visibility on public profile, showStats controls stats visibility."
+                    }
+                },
+                {
+                    "name": "Upload Avatar",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "file",
+                                    "type": "file",
+                                    "src": "",
+                                    "description": "Image file (JPEG, PNG, WebP, GIF). Max 5MB."
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profile/me/avatar",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profile", "me", "avatar"]
+                        },
+                        "description": "Upload a new avatar image. Accepts JPEG, PNG, WebP, and GIF formats. Maximum file size is 5MB."
+                    }
+                },
+                {
+                    "name": "Delete Avatar",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profile/me/avatar",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profile", "me", "avatar"]
+                        },
+                        "description": "Remove the current avatar. Sets avatarUrl to null."
+                    }
+                },
+                {
+                    "name": "Get Public Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/profile/public/{{userId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "profile", "public", "{{userId}}"]
+                        },
+                        "description": "Get a user's public profile. Returns 404 if profilePublic is false. Email and stats visibility depend on user's privacy settings."
+                    }
+                }
+            ],
+            "description": "User profile management including profile updates, privacy settings, and avatar handling"
+        },
+        {
+            "name": "Media",
+            "item": [
+                {
+                    "name": "Get Media",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/media/{{mediaId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "media", "{{mediaId}}"]
+                        },
+                        "description": "Retrieve uploaded media (e.g., avatar images) by ID. Returns the binary image data with appropriate Content-Type header."
+                    }
+                }
+            ],
+            "description": "Media endpoints for serving uploaded files"
+        },
+        {
+            "name": "Quizzes",
+            "item": [
+                {
+                    "name": "Quiz Management",
+                    "item": [
+                        {
+                            "name": "Create Quiz",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('quizId', jsonData.id);",
+                                            "    console.log('Quiz ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"title\": \"Sample Quiz\",\n    \"description\": \"A sample quiz for testing\",\n    \"isPublic\": true,\n    \"allowAnonymous\": true,\n    \"timerMinutes\": 30,\n    \"passingScore\": 70,\n    \"shuffleQuestions\": false,\n    \"showCorrectAnswers\": true,\n    \"maxAttempts\": 3,\n    \"tagNames\": [\"sample\", \"test\"],\n    \"availableFrom\": null,\n    \"availableUntil\": null,\n    \"resultsVisibleFrom\": null,\n    \"requireAccessCode\": false,\n    \"accessCode\": null,\n    \"filterIpAddresses\": false,\n    \"allowedIpAddresses\": null\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes"]
+                                },
+                                "description": "Create a new quiz. Quiz is created as unpublished by default. Optional fields: availableFrom/availableUntil (ISO 8601 timestamps for scheduling), requireAccessCode/accessCode (access restriction), filterIpAddresses/allowedIpAddresses (IP filtering with CIDR support)."
+                            }
+                        },
+                        {
+                            "name": "Get My Quizzes",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes?page=0&size=20",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes"],
+                                    "query": [
+                                        { "key": "page", "value": "0" },
+                                        { "key": "size", "value": "20" }
+                                    ]
+                                },
+                                "description": "Get paginated list of quizzes created by the authenticated user"
+                            }
+                        },
+                        {
+                            "name": "Get Quiz Detail",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}"]
+                                },
+                                "description": "Get full quiz details including all questions"
+                            }
+                        },
+                        {
+                            "name": "Update Quiz",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"title\": \"Updated Quiz Title\",\n    \"description\": \"Updated description\",\n    \"timerMinutes\": 45,\n    \"isPublic\": true,\n    \"allowAnonymous\": true,\n    \"passingScore\": 70,\n    \"shuffleQuestions\": false,\n    \"showCorrectAnswers\": true,\n    \"maxAttempts\": 3,\n    \"availableFrom\": null,\n    \"availableUntil\": null,\n    \"resultsVisibleFrom\": null,\n    \"requireAccessCode\": false,\n    \"accessCode\": null,\n    \"filterIpAddresses\": false,\n    \"allowedIpAddresses\": null\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}"]
+                                },
+                                "description": "Update quiz settings. Optional fields include scheduling (availableFrom/availableUntil), access restriction (requireAccessCode/accessCode), and IP filtering (filterIpAddresses/allowedIpAddresses with CIDR support)."
+                            }
+                        },
+                        {
+                            "name": "Publish Quiz",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/publish?publish=true",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "publish"],
+                                    "query": [{ "key": "publish", "value": "true" }]
+                                },
+                                "description": "Publish or unpublish a quiz. Set publish=false to unpublish."
+                            }
+                        },
+                        {
+                            "name": "Delete Quiz",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}"]
+                                },
+                                "description": "Delete a quiz and all its questions"
+                            }
+                        }
+                    ],
+                    "description": "Quiz CRUD operations"
+                },
+                {
+                    "name": "Questions",
+                    "item": [
+                        {
+                            "name": "Add Question",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('questionId', jsonData.id);",
+                                            "    console.log('Question ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"text\": \"What is 2 + 2?\",\n    \"type\": \"MULTIPLE_CHOICE\",\n    \"points\": 1,\n    \"explanation\": \"Basic arithmetic\",\n    \"data\": {\n        \"choices\": [\n            {\"id\": \"a\", \"text\": \"3\", \"correct\": false},\n            {\"id\": \"b\", \"text\": \"4\", \"correct\": true},\n            {\"id\": \"c\", \"text\": \"5\", \"correct\": false}\n        ]\n    }\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/questions",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "questions"]
+                                },
+                                "description": "Add a new question to a quiz. Types: MULTIPLE_CHOICE, MULTIPLE_ANSWER, TRUE_FALSE, FILL_IN_BLANK, DROPDOWN, FREE_TEXT"
+                            }
+                        },
+                        {
+                            "name": "Get Questions",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/questions",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "questions"]
+                                },
+                                "description": "Get all questions for a quiz"
+                            }
+                        },
+                        {
+                            "name": "Update Question",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"text\": \"What is 3 + 3?\",\n    \"type\": \"MULTIPLE_CHOICE\",\n    \"points\": 2,\n    \"data\": {\n        \"choices\": [\n            {\"id\": \"a\", \"text\": \"5\", \"correct\": false},\n            {\"id\": \"b\", \"text\": \"6\", \"correct\": true},\n            {\"id\": \"c\", \"text\": \"7\", \"correct\": false}\n        ]\n    }\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/{{questionId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "questions", "{{questionId}}"]
+                                },
+                                "description": "Update a question"
+                            }
+                        },
+                        {
+                            "name": "Reorder Questions",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"questionOrders\": [\n        {\"questionId\": \"{{questionId}}\", \"order\": 0}\n    ]\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/reorder",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "questions", "reorder"]
+                                },
+                                "description": "Reorder questions in a quiz"
+                            }
+                        },
+                        {
+                            "name": "Delete Question",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/questions/{{questionId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "questions", "{{questionId}}"]
+                                },
+                                "description": "Delete a question from a quiz"
+                            }
+                        }
+                    ],
+                    "description": "Question management within quizzes"
+                },
+                {
+                    "name": "Import/Export",
+                    "item": [
+                        {
+                            "name": "Import Quiz",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('quizId', jsonData.id);",
+                                            "    console.log('Imported Quiz ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"quizData\": {\n        \"title\": \"Imported Quiz\",\n        \"description\": \"Imported from JSON\",\n        \"timeLimit\": 30,\n        \"questions\": [\n            {\n                \"type\": \"multiple_choice\",\n                \"text\": \"What is the capital of France?\",\n                \"points\": 1,\n                \"choices\": [\n                    {\"text\": \"London\", \"correct\": false},\n                    {\"text\": \"Paris\", \"correct\": true},\n                    {\"text\": \"Berlin\", \"correct\": false}\n                ]\n            },\n            {\n                \"type\": \"true_false\",\n                \"text\": \"The Earth is flat.\",\n                \"points\": 1,\n                \"correct\": false\n            }\n        ]\n    }\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/import",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "import"]
+                                },
+                                "description": "Import a quiz from JSON format (compatible with CanvasQuizReplay)"
+                            }
+                        },
+                        {
+                            "name": "Export Quiz",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/export",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "export"]
+                                },
+                                "description": "Export a quiz to JSON format"
+                            }
+                        }
+                    ],
+                    "description": "Import and export quizzes in JSON format"
+                },
+                {
+                    "name": "Quiz Taking",
+                    "item": [
+                        {
+                            "name": "Get Public Quizzes",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/public?page=0&size=20",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "public"],
+                                    "query": [
+                                        { "key": "page", "value": "0" },
+                                        { "key": "size", "value": "20" }
+                                    ]
+                                },
+                                "description": "Get paginated list of published public quizzes"
+                            }
+                        },
+                        {
+                            "name": "Get Public Quiz for Taking",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/public/{{quizId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "public", "{{quizId}}"]
+                                },
+                                "description": "Get a quiz for taking (without correct answers)"
+                            }
+                        },
+                        {
+                            "name": "Start Attempt (Authenticated)",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('attemptId', jsonData.id);",
+                                            "    console.log('Attempt ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"accessCode\": null\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/attempts",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "attempts"]
+                                },
+                                "description": "Start a quiz attempt as an authenticated user. Include accessCode if the quiz requires one."
+                            }
+                        },
+                        {
+                            "name": "Start Attempt (Anonymous)",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('attemptId', jsonData.id);",
+                                            "    console.log('Attempt ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"anonymousName\": \"Guest User\",\n    \"anonymousEmail\": \"guest@example.com\",\n    \"accessCode\": null\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/attempts",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "attempts"]
+                                },
+                                "description": "Start a quiz attempt anonymously. Include accessCode if the quiz requires one. Limited to 3 attempts per IP or email. IP filtering may block access from unauthorized addresses."
+                            }
+                        },
+                        {
+                            "name": "Submit Answers",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"answers\": [\n        {\n            \"questionId\": \"{{questionId}}\",\n            \"answerData\": {\"selected\": \"b\"},\n            \"timeTakenSeconds\": 15\n        }\n    ]\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/attempts/{{attemptId}}/submit",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "attempts", "{{attemptId}}", "submit"]
+                                },
+                                "description": "Submit answers for a quiz attempt. Returns results with scoring."
+                            }
+                        },
+                        {
+                            "name": "Get Attempt Result",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/quizzes/{{quizId}}/attempts/{{attemptId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "quizzes", "{{quizId}}", "attempts", "{{attemptId}}"]
+                                },
+                                "description": "Get results for a completed quiz attempt"
+                            }
+                        }
+                    ],
+                    "description": "Endpoints for taking quizzes (public access)"
+                }
+            ],
+            "description": "Quiz management, questions, import/export, and quiz taking"
+        },
+        {
+            "name": "Courses",
+            "item": [
+                {
+                    "name": "Course Management",
+                    "item": [
+                        {
+                            "name": "Create Course",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('courseId', jsonData.id);",
+                                            "    console.log('Course ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"title\": \"Introduction to JavaScript\",\n    \"description\": \"Learn JavaScript from scratch with hands-on examples\",\n    \"difficulty\": \"BEGINNER\",\n    \"estimatedHours\": 20,\n    \"tagNames\": [\"javascript\", \"programming\", \"web\"]\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses"]
+                                },
+                                "description": "Create a new course. Course is created as unpublished by default."
+                            }
+                        },
+                        {
+                            "name": "Get My Courses",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses?page=0&size=20",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses"],
+                                    "query": [
+                                        { "key": "page", "value": "0" },
+                                        { "key": "size", "value": "20" }
+                                    ]
+                                },
+                                "description": "Get paginated list of courses created by the authenticated user"
+                            }
+                        },
+                        {
+                            "name": "Get Course Detail",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}"]
+                                },
+                                "description": "Get full course details including materials and quizzes"
+                            }
+                        },
+                        {
+                            "name": "Update Course",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"title\": \"Introduction to JavaScript - Updated\",\n    \"description\": \"Updated course description\",\n    \"difficulty\": \"INTERMEDIATE\",\n    \"estimatedHours\": 25\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}"]
+                                },
+                                "description": "Update course settings"
+                            }
+                        },
+                        {
+                            "name": "Publish Course",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/publish?publish=true",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "publish"],
+                                    "query": [{ "key": "publish", "value": "true" }]
+                                },
+                                "description": "Publish or unpublish a course. Set publish=false to unpublish."
+                            }
+                        },
+                        {
+                            "name": "Delete Course",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}"]
+                                },
+                                "description": "Delete a course and all its materials"
+                            }
+                        }
+                    ],
+                    "description": "Course CRUD operations"
+                },
+                {
+                    "name": "Materials",
+                    "item": [
+                        {
+                            "name": "Add Material (Text)",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('materialId', jsonData.id);",
+                                            "    console.log('Material ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"title\": \"Variables and Data Types\",\n    \"contentType\": \"TEXT\",\n    \"content\": \"# Variables\\n\\nIn JavaScript, you can declare variables using `var`, `let`, or `const`.\\n\\n## Example\\n\\n```javascript\\nlet name = 'John';\\nconst PI = 3.14159;\\n```\\n\\n## Math Formula\\n\\nThe quadratic formula: $x = \\\\frac{-b \\\\pm \\\\sqrt{b^2-4ac}}{2a}$\",\n    \"durationMinutes\": 20\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials"]
+                                },
+                                "description": "Add a text material (supports Markdown and LaTeX)"
+                            }
+                        },
+                        {
+                            "name": "Add Material (File)",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"title\": \"Course Slides\",\n    \"contentType\": \"FILE\",\n    \"fileId\": \"{{mediaId}}\",\n    \"durationMinutes\": 30\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials"]
+                                },
+                                "description": "Add a file-based material (reference to uploaded media)"
+                            }
+                        },
+                        {
+                            "name": "Get Materials",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials"]
+                                },
+                                "description": "Get all materials for a course"
+                            }
+                        },
+                        {
+                            "name": "Get Material",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/{{materialId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "{{materialId}}"]
+                                },
+                                "description": "Get a specific material"
+                            }
+                        },
+                        {
+                            "name": "Update Material",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"title\": \"Updated Material Title\",\n    \"contentType\": \"TEXT\",\n    \"content\": \"# Updated Content\\n\\nThis is updated **markdown** content.\",\n    \"durationMinutes\": 25\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/{{materialId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "{{materialId}}"]
+                                },
+                                "description": "Update a material"
+                            }
+                        },
+                        {
+                            "name": "Reorder Materials",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"materialOrders\": [\n        {\"materialId\": \"{{materialId}}\", \"order\": 0}\n    ]\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/reorder",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "reorder"]
+                                },
+                                "description": "Reorder materials in a course"
+                            }
+                        },
+                        {
+                            "name": "Publish Material",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/{{materialId}}/publish?publish=true",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "{{materialId}}", "publish"],
+                                    "query": [{ "key": "publish", "value": "true" }]
+                                },
+                                "description": "Publish or unpublish a material"
+                            }
+                        },
+                        {
+                            "name": "Delete Material",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/{{materialId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "{{materialId}}"]
+                                },
+                                "description": "Delete a material from a course"
+                            }
+                        }
+                    ],
+                    "description": "Material management within courses"
+                },
+                {
+                    "name": "Quiz Association",
+                    "item": [
+                        {
+                            "name": "Attach Quiz to Course",
+                            "request": {
+                                "method": "POST",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/quizzes/{{quizId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "quizzes", "{{quizId}}"]
+                                },
+                                "description": "Attach a quiz to a course"
+                            }
+                        },
+                        {
+                            "name": "Detach Quiz from Course",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/quizzes/{{quizId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "quizzes", "{{quizId}}"]
+                                },
+                                "description": "Detach a quiz from a course"
+                            }
+                        },
+                        {
+                            "name": "Attach Quiz to Material",
+                            "request": {
+                                "method": "POST",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/{{materialId}}/quizzes/{{quizId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "{{materialId}}", "quizzes", "{{quizId}}"]
+                                },
+                                "description": "Attach a quiz to a material"
+                            }
+                        },
+                        {
+                            "name": "Detach Quiz from Material",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/{{materialId}}/quizzes/{{quizId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "{{materialId}}", "quizzes", "{{quizId}}"]
+                                },
+                                "description": "Detach a quiz from a material"
+                            }
+                        }
+                    ],
+                    "description": "Associate quizzes with courses and materials"
+                },
+                {
+                    "name": "Public Browsing",
+                    "item": [
+                        {
+                            "name": "Get Public Courses",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/public?page=0&size=20",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "public"],
+                                    "query": [
+                                        { "key": "page", "value": "0" },
+                                        { "key": "size", "value": "20" }
+                                    ]
+                                },
+                                "description": "Get paginated list of published public courses"
+                            }
+                        },
+                        {
+                            "name": "Get Public Course Detail",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/public/{{courseId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "public", "{{courseId}}"]
+                                },
+                                "description": "Get public course details (without full content)"
+                            }
+                        },
+                        {
+                            "name": "Get Public Courses by Difficulty",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/public/difficulty/BEGINNER?page=0&size=20",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "public", "difficulty", "BEGINNER"],
+                                    "query": [
+                                        { "key": "page", "value": "0" },
+                                        { "key": "size", "value": "20" }
+                                    ]
+                                },
+                                "description": "Filter public courses by difficulty level"
+                            }
+                        }
+                    ],
+                    "description": "Browse published courses without authentication"
+                },
+                {
+                    "name": "Enrollment",
+                    "item": [
+                        {
+                            "name": "Enroll in Course",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('enrollmentId', jsonData.id);",
+                                            "    console.log('Enrollment ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/enroll",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "enroll"]
+                                },
+                                "description": "Enroll in a published course"
+                            }
+                        },
+                        {
+                            "name": "Unenroll from Course",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/enroll",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "enroll"]
+                                },
+                                "description": "Unenroll from a course (deletes progress)"
+                            }
+                        },
+                        {
+                            "name": "Get My Enrollments",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/enrolled?page=0&size=20",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "enrolled"],
+                                    "query": [
+                                        { "key": "page", "value": "0" },
+                                        { "key": "size", "value": "20" }
+                                    ]
+                                },
+                                "description": "Get list of courses you're enrolled in"
+                            }
+                        },
+                        {
+                            "name": "Get Course Enrollments (Owner)",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/enrollments?page=0&size=20",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "enrollments"],
+                                    "query": [
+                                        { "key": "page", "value": "0" },
+                                        { "key": "size", "value": "20" }
+                                    ]
+                                },
+                                "description": "Get list of users enrolled in your course (owner only)"
+                            }
+                        }
+                    ],
+                    "description": "Course enrollment management"
+                },
+                {
+                    "name": "Progress Tracking",
+                    "item": [
+                        {
+                            "name": "Get My Progress",
+                            "request": {
+                                "method": "GET",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/progress",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "progress"]
+                                },
+                                "description": "Get your progress in an enrolled course"
+                            }
+                        },
+                        {
+                            "name": "Mark Material Complete",
+                            "request": {
+                                "method": "POST",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/{{materialId}}/complete",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "{{materialId}}", "complete"]
+                                },
+                                "description": "Mark a material as completed"
+                            }
+                        },
+                        {
+                            "name": "Unmark Material Complete",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/courses/{{courseId}}/materials/{{materialId}}/complete",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "courses", "{{courseId}}", "materials", "{{materialId}}", "complete"]
+                                },
+                                "description": "Mark a material as not completed"
+                            }
+                        }
+                    ],
+                    "description": "Track progress through course materials"
+                }
+            ],
+            "description": "Course management, materials, enrollment, and progress tracking"
+        },
+        {
+            "name": "Tags",
+            "item": [
+                {
+                    "name": "Public",
+                    "item": [
+                        {
+                            "name": "Get All Tags",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/tags",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "tags"]
+                                },
+                                "description": "Get all tags sorted alphabetically by name"
+                            }
+                        },
+                        {
+                            "name": "Get Tag by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/tags/{{tagId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "tags", "{{tagId}}"]
+                                },
+                                "description": "Get a specific tag by its ID"
+                            }
+                        },
+                        {
+                            "name": "Get Tag by Slug",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/tags/slug/{{tagSlug}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "tags", "slug", "{{tagSlug}}"]
+                                },
+                                "description": "Get a specific tag by its slug"
+                            }
+                        }
+                    ],
+                    "description": "Public endpoints for browsing tags"
+                },
+                {
+                    "name": "Admin",
+                    "item": [
+                        {
+                            "name": "Create Tag",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('tagId', jsonData.id);",
+                                            "    pm.environment.set('tagSlug', jsonData.slug);",
+                                            "    console.log('Tag ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"JavaScript\",\n    \"color\": \"#F7DF1E\",\n    \"icon\": \"code\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/tags",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "tags"]
+                                },
+                                "description": "Create a new tag (Admin only). Slug is auto-generated from name."
+                            }
+                        },
+                        {
+                            "name": "Update Tag",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"TypeScript\",\n    \"color\": \"#3178C6\",\n    \"icon\": \"code\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/tags/{{tagId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "tags", "{{tagId}}"]
+                                },
+                                "description": "Update an existing tag (Admin only)"
+                            }
+                        },
+                        {
+                            "name": "Delete Tag",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/tags/{{tagId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "tags", "{{tagId}}"]
+                                },
+                                "description": "Delete a tag (Admin only)"
+                            }
+                        }
+                    ],
+                    "description": "Admin-only endpoints for tag management"
+                }
+            ],
+            "description": "Tag management - public read access, admin-only write access"
+        },
+        {
+            "name": "Categories",
+            "item": [
+                {
+                    "name": "Public",
+                    "item": [
+                        {
+                            "name": "Get Category Tree",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/categories",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "categories"]
+                                },
+                                "description": "Get hierarchical category tree with nested children"
+                            }
+                        },
+                        {
+                            "name": "Get Category by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/categories/{{categoryId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "categories", "{{categoryId}}"]
+                                },
+                                "description": "Get a specific category with its children"
+                            }
+                        },
+                        {
+                            "name": "Get Category by Slug",
+                            "request": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/categories/slug/{{categorySlug}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "categories", "slug", "{{categorySlug}}"]
+                                },
+                                "description": "Get a specific category by its slug"
+                            }
+                        }
+                    ],
+                    "description": "Public endpoints for browsing categories"
+                },
+                {
+                    "name": "Admin",
+                    "item": [
+                        {
+                            "name": "Create Category",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('categoryId', jsonData.id);",
+                                            "    pm.environment.set('categorySlug', jsonData.slug);",
+                                            "    console.log('Category ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"Programming\",\n    \"description\": \"Programming and software development courses\",\n    \"icon\": \"code\",\n    \"sortOrder\": 0,\n    \"color\": \"#3B82F6\",\n    \"imageUrl\": null,\n    \"isFeatured\": true,\n    \"isActive\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/categories",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "categories"]
+                                },
+                                "description": "Create a new root category (Admin only). Slug is auto-generated from name."
+                            }
+                        },
+                        {
+                            "name": "Create Subcategory",
+                            "event": [
+                                {
+                                    "listen": "test",
+                                    "script": {
+                                        "exec": [
+                                            "if (pm.response.code === 201) {",
+                                            "    var jsonData = pm.response.json();",
+                                            "    pm.environment.set('subcategoryId', jsonData.id);",
+                                            "    console.log('Subcategory ID saved:', jsonData.id);",
+                                            "}"
+                                        ],
+                                        "type": "text/javascript"
+                                    }
+                                }
+                            ],
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"Web Development\",\n    \"description\": \"Frontend and backend web development\",\n    \"parentId\": \"{{categoryId}}\",\n    \"icon\": \"globe\",\n    \"sortOrder\": 0,\n    \"color\": null,\n    \"imageUrl\": null,\n    \"isFeatured\": false,\n    \"isActive\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/categories",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "categories"]
+                                },
+                                "description": "Create a subcategory under an existing category (Admin only)"
+                            }
+                        },
+                        {
+                            "name": "Update Category",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    { "key": "Content-Type", "value": "application/json" },
+                                    { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"Software Development\",\n    \"description\": \"Updated description\",\n    \"icon\": \"terminal\",\n    \"sortOrder\": 1,\n    \"color\": \"#10B981\",\n    \"imageUrl\": null,\n    \"isFeatured\": false,\n    \"isActive\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/categories/{{categoryId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "categories", "{{categoryId}}"]
+                                },
+                                "description": "Update an existing category (Admin only)"
+                            }
+                        },
+                        {
+                            "name": "Delete Category",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/categories/{{categoryId}}",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "categories", "{{categoryId}}"]
+                                },
+                                "description": "Delete a category and its children (Admin only)"
+                            }
+                        }
+                    ],
+                    "description": "Admin-only endpoints for category management"
+                }
+            ],
+            "description": "Category management - hierarchical category tree with public read access and admin-only write access"
+        }
+    ]
+}

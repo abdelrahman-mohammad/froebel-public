@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/froebel
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  mail:
+    host: localhost
+    port: 1025
+    username: test
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+jwt:
+  secret: "test-secret-key-that-is-at-least-32-bytes-long-for-hs512"
+  expiration: 86400000
+  refresh-expiration: 604800000
+
+app:
+  security:
+    max-login-attempts: 5
+    lockout-duration-minutes: 15
+    attempt-window-minutes: 15
+    trusted-proxies:
+      - "127.0.0.1"
+      - "::1"
+  settings:
+    data-export:
+      max-per-day: 1
+      expiry-days: 7
+      storage-path: "./exports"

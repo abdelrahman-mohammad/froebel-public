@@ -1,0 +1,869 @@
+/**
+ * ============================================================
+ * Froebel Global Styles
+ * ============================================================
+ *
+ * THEME SYSTEM
+ * ------------
+ * - All colors are defined as CSS custom properties (variables)
+ * - Light mode: :root selector
+ * - Dark mode: .dark selector (class-based via next-themes)
+ *
+ * COLOR FORMAT
+ * ------------
+ * - Main theme colors: Hex format (#0374b5)
+ * - Sidebar colors: HSL format (220 16% 96%) - requires hsl() wrapper in Tailwind
+ *
+ * COLOR NAMING CONVENTION
+ * -----------------------
+ * - --[color-name]: Base color
+ * - --[color-name]-foreground: Text color on that background
+ * - --[color-name]-hover: Hover state color
+ * - --[color-name]-active: Active/pressed state color
+ * - --[color-name]-dark: Darker shade
+ * - --[color-name]-light: Lighter shade
+ *
+ * CONTAINER PATTERNS
+ * ------------------
+ * - Page containers: Use `container mx-auto px-4 py-8`
+ * - Narrow forms (login/register): `max-w-md mx-auto`
+ * - Grid layouts (browse): `container mx-auto` with responsive grid
+ *
+ * FOCUS STATE STANDARD
+ * --------------------
+ * All interactive components use the outline-offset pattern:
+ * `focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2`
+ *
+ * INPUT/SELECT HEIGHTS
+ * --------------------
+ * - Default: h-10 (40px)
+ * - Small: h-8 (32px)
+ * - Large: h-12 (48px)
+ *
+ * SPACING CONVENTIONS
+ * -------------------
+ * - Section gaps: gap-4, gap-6, gap-8
+ * - Card padding: p-4, p-6, p-8
+ * - Vertical rhythm: space-y-4, space-y-6, space-y-8
+ *
+ * ============================================================
+ */
+
+/* Google Sans Flex font is loaded via HTML <head> in layout.tsx for better performance */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================ */
+/* Custom Cursors - Must be after @tailwind utilities to override */
+/* ============================================================ */
+
+/* Default cursor */
+*,
+html,
+body {
+    cursor: url("/cursors/pointer.cur"), auto !important;
+}
+
+/* Pointer/Hand cursor for clickable elements */
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+label[for],
+.cursor-pointer {
+    cursor: url("/cursors/link.cur"), pointer !important;
+}
+
+/* Text cursor for text inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+textarea,
+[contenteditable="true"],
+.cursor-text {
+    cursor: url("/cursors/text.cur"), text !important;
+}
+
+/* Help cursor */
+.cursor-help {
+    cursor: url("/cursors/help.cur"), help !important;
+}
+
+/* Not-allowed cursor */
+[disabled],
+.disabled,
+.cursor-not-allowed {
+    cursor: url("/cursors/unavailable.cur"), not-allowed !important;
+}
+
+/* Wait/Loading cursor */
+.cursor-wait {
+    cursor: url("/cursors/busy.ani"), wait !important;
+}
+
+/* Progress cursor */
+.cursor-progress {
+    cursor: url("/cursors/working.ani"), progress !important;
+}
+
+/* Move cursor */
+.cursor-move,
+[draggable="true"] {
+    cursor: url("/cursors/move.cur"), move !important;
+}
+
+/* Resize cursors */
+.cursor-ew-resize {
+    cursor: url("/cursors/horz.cur"), ew-resize !important;
+}
+
+.cursor-ns-resize {
+    cursor: url("/cursors/vert.cur"), ns-resize !important;
+}
+
+.cursor-nesw-resize {
+    cursor: url("/cursors/dgn1.cur"), nesw-resize !important;
+}
+
+.cursor-nwse-resize {
+    cursor: url("/cursors/dgn2.cur"), nwse-resize !important;
+}
+
+/* Crosshair/Precision cursor */
+.cursor-crosshair {
+    cursor: url("/cursors/precision.cur"), crosshair !important;
+}
+
+/* Grab cursor */
+.cursor-grab {
+    cursor: url("/cursors/alternate.cur"), grab !important;
+}
+
+.cursor-grabbing {
+    cursor: url("/cursors/move.cur"), grabbing !important;
+}
+
+/* Light Mode - Quiz Replay Colors */
+:root {
+    --radius: 0.5rem;
+
+    /* Core colors from Quiz Replay */
+    --background: #f0f2f5;
+    --foreground: #1f2937;
+
+    /* Primary - Quiz Replay blue */
+    --primary: #0374b5;
+    --primary-foreground: #ffffff;
+    --primary-dark: #0b5a8a;
+    --primary-light: #e8f4fc;
+
+    /* Card/Surface */
+    --card: #ffffff;
+    --card-foreground: #1f2937;
+    --popover: #ffffff;
+    --popover-foreground: #1f2937;
+
+    /* Secondary */
+    --secondary: #f0f2f5;
+    --secondary-foreground: #1f2937;
+
+    /* Muted */
+    --muted: #f0f2f5;
+    --muted-foreground: #6b7280;
+
+    /* Accent */
+    --accent: #e8f4fc;
+    --accent-foreground: #0374b5;
+
+    /* Destructive - Quiz Replay danger */
+    --destructive: #e03131;
+    --destructive-foreground: #ffffff;
+
+    /* Success - Quiz Replay success */
+    --success: #0b874b;
+    --success-foreground: #ffffff;
+
+    /* Warning - Quiz Replay warning */
+    --warning: #fc5a03;
+    --warning-foreground: #ffffff;
+
+    /* Correct/Incorrect for quiz answers */
+    --correct: #dcfce7;
+    --correct-foreground: #166534;
+    --incorrect: #fee2e2;
+    --incorrect-foreground: #991b1b;
+
+    /* Button state colors - for gradients and active states */
+    --primary-active: #094a6d;
+    --secondary-hover: #d4d4d8;
+    --secondary-active: #b4b4b8;
+    --destructive-hover: #c42828;
+    --destructive-active: #a12020;
+    --success-hover: #096b3c;
+    --success-active: #07522e;
+    --warning-hover: #d94e02;
+    --warning-active: #b34001;
+
+    /* Borders */
+    --border: #d1d5db;
+    --border-light: #e5e7eb;
+    --input: #d1d5db;
+    --ring: #0374b5;
+
+    /* Charts */
+    --chart-1: #0374b5;
+    --chart-2: #0b874b;
+    --chart-3: #fc5a03;
+    --chart-4: #8b5cf6;
+    --chart-5: #ec4899;
+}
+
+/* Dark Mode - Depth-based (background lightest, elements darker) */
+.dark {
+    --background: #262626;
+    --foreground: #f5f5f5;
+
+    /* Primary - Quiz Replay blue (lighter for dark mode) */
+    --primary: #5bb3e8;
+    --primary-foreground: #1a1a1a;
+    --primary-dark: #3a8bc4;
+    --primary-light: #1a3a52;
+
+    /* Card/Surface - darker than background (recessed effect) */
+    --card: #1a1a1a;
+    --card-foreground: #f5f5f5;
+    --popover: #1a1a1a;
+    --popover-foreground: #f5f5f5;
+
+    /* Secondary */
+    --secondary: #1f1f1f;
+    --secondary-foreground: #f5f5f5;
+
+    /* Muted */
+    --muted: #1f1f1f;
+    --muted-foreground: #a3a3a3;
+
+    /* Accent */
+    --accent: #1f1f1f;
+    --accent-foreground: #5bb3e8;
+
+    /* Destructive - Quiz Replay danger (lighter for dark mode) */
+    --destructive: #ff6b6b;
+    --destructive-foreground: #1a1a1a;
+
+    /* Success - Quiz Replay success (lighter for dark mode) */
+    --success: #4ade80;
+    --success-foreground: #1a1a1a;
+
+    /* Warning - Quiz Replay warning (lighter for dark mode) */
+    --warning: #ffa94d;
+    --warning-foreground: #1a1a1a;
+
+    /* Correct/Incorrect for quiz answers (dark mode) */
+    --correct: #1a2e1a;
+    --correct-foreground: #4ade80;
+    --incorrect: #2e1a1a;
+    --incorrect-foreground: #ff6b6b;
+
+    /* Button state colors - for dark mode gradients */
+    --primary-hover: #2a7ab5;
+    --primary-active: #1f5a85;
+    --secondary-hover: #171717;
+    --secondary-active: #121212;
+    --destructive-hover: #ff5252;
+    --destructive-active: #e03131;
+    --success-hover: #5ce49c;
+    --success-active: #3cb371;
+    --warning-hover: #ffb347;
+    --warning-active: #fc8c3c;
+
+    /* Borders */
+    --border: #383838;
+    --border-light: #474747;
+    --input: #383838;
+    --ring: #5bb3e8;
+
+    /* Charts */
+    --chart-1: #5bb3e8;
+    --chart-2: #4ade80;
+    --chart-3: #ffa94d;
+    --chart-4: #a78bfa;
+    --chart-5: #f472b6;
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-family: "Google Sans Flex", var(--font-geist-sans), Helvetica, Arial, sans-serif;
+        font-optical-sizing: auto;
+        font-variation-settings:
+            "slnt" 0,
+            "wdth" 100,
+            "GRAD" 0,
+            "ROND" 0;
+    }
+
+    :root {
+        --sidebar-background: 220 16% 96%;
+        --sidebar-foreground: 240 5.3% 26.1%;
+        --sidebar-primary: 240 5.9% 10%;
+        --sidebar-primary-foreground: 0 0% 98%;
+        --sidebar-accent: 220 13% 88%;
+        --sidebar-accent-foreground: 240 5.9% 10%;
+        --sidebar-border: 220 13% 91%;
+        --sidebar-ring: 217.2 91.2% 59.8%;
+    }
+    .dark {
+        --sidebar-background: 0 0% 15%;
+        --sidebar-foreground: 0 0% 96%;
+        --sidebar-primary: 199 76% 63%;
+        --sidebar-primary-foreground: 0 0% 10%;
+        --sidebar-accent: 0 0% 10%;
+        --sidebar-accent-foreground: 0 0% 96%;
+        --sidebar-border: 0 0% 22%;
+        --sidebar-ring: 199 76% 63%;
+    }
+}
+
+@layer components {
+    /* Primary button - flat */
+    .btn-primary-gradient {
+        background: var(--primary);
+    }
+    .btn-primary-gradient:hover {
+        background: var(--primary-dark);
+    }
+    .btn-primary-gradient:active {
+        background: var(--primary-active);
+    }
+    .dark .btn-primary-gradient {
+        background: var(--primary-dark);
+    }
+    .dark .btn-primary-gradient:hover {
+        background: var(--primary-hover);
+    }
+    .dark .btn-primary-gradient:active {
+        background: var(--primary-active);
+    }
+
+    /* Secondary button - flat */
+    .btn-secondary-gradient {
+        background: var(--muted);
+    }
+    .btn-secondary-gradient:hover {
+        background: var(--secondary-hover);
+    }
+    .btn-secondary-gradient:active {
+        background: var(--secondary-active);
+    }
+    .dark .btn-secondary-gradient {
+        background: var(--secondary);
+    }
+    .dark .btn-secondary-gradient:hover {
+        background: var(--secondary-hover);
+    }
+    .dark .btn-secondary-gradient:active {
+        background: var(--secondary-active);
+    }
+
+    /* Destructive button - flat */
+    .btn-destructive-gradient {
+        background: var(--destructive);
+    }
+    .btn-destructive-gradient:hover {
+        background: var(--destructive-hover);
+    }
+    .btn-destructive-gradient:active {
+        background: var(--destructive-active);
+    }
+    .dark .btn-destructive-gradient {
+        background: #dc2626;
+    }
+    .dark .btn-destructive-gradient:hover {
+        background: #b91c1c;
+    }
+    .dark .btn-destructive-gradient:active {
+        background: #991b1b;
+    }
+
+    /* Success button - flat */
+    .btn-success-gradient {
+        background: var(--success);
+    }
+    .btn-success-gradient:hover {
+        background: var(--success-hover);
+    }
+    .btn-success-gradient:active {
+        background: var(--success-active);
+    }
+    .dark .btn-success-gradient {
+        background: #16a34a;
+    }
+    .dark .btn-success-gradient:hover {
+        background: #15803d;
+    }
+    .dark .btn-success-gradient:active {
+        background: #166534;
+    }
+
+    /* Warning button - flat */
+    .btn-warning-gradient {
+        background: var(--warning);
+    }
+    .btn-warning-gradient:hover {
+        background: var(--warning-hover);
+    }
+    .btn-warning-gradient:active {
+        background: var(--warning-active);
+    }
+    .dark .btn-warning-gradient {
+        background: #ea580c;
+    }
+    .dark .btn-warning-gradient:hover {
+        background: #c2410c;
+    }
+    .dark .btn-warning-gradient:active {
+        background: #9a3412;
+    }
+
+    /* Badge gradients */
+    .badge-primary-gradient {
+        background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+    }
+
+    .badge-secondary-gradient {
+        background: linear-gradient(180deg, var(--card) 0%, var(--muted) 100%);
+    }
+
+    .dark .badge-secondary-gradient {
+        background: linear-gradient(180deg, var(--secondary) 0%, var(--background) 100%);
+    }
+
+    .badge-destructive-gradient {
+        background: linear-gradient(180deg, var(--destructive) 0%, var(--destructive-hover) 100%);
+    }
+
+    /* Button group attached - flat hover backgrounds (darkest color of gradient) */
+    .btn-group-attached.btn-primary-gradient:hover {
+        background: var(--primary-dark);
+    }
+
+    .btn-group-attached.btn-secondary-gradient:hover {
+        background: var(--muted);
+    }
+
+    .dark .btn-group-attached.btn-secondary-gradient:hover {
+        background: #171717;
+    }
+
+    .btn-group-attached.btn-destructive-gradient:hover {
+        background: #c42828;
+    }
+
+    .btn-group-attached.btn-success-gradient:hover {
+        background: #096b3c;
+    }
+
+    .btn-group-attached.btn-warning-gradient:hover {
+        background: #d94e02;
+    }
+
+    /* Outline variant (no gradient class) */
+    .btn-group-attached:hover {
+        background: var(--muted);
+    }
+
+    .dark .btn-group-attached:hover {
+        background: #262626;
+    }
+
+    /* ============================================================ */
+    /* Quiz Component Styles */
+    /* ============================================================ */
+
+    /* Question text styling (used for markdown content) */
+    .question_text {
+        @apply text-base leading-relaxed;
+    }
+
+    .question_text p {
+        @apply mb-3;
+    }
+
+    .question_text p:last-child {
+        @apply mb-0;
+    }
+
+    /* Pulsing warning animation */
+    @keyframes pulse-warning {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    /* Pulsing glow for editing state */
+    @keyframes pulse-glow {
+        0%,
+        100% {
+            box-shadow:
+                0 0 0 0 rgba(3, 116, 181, 0.4),
+                0 0 8px 2px rgba(3, 116, 181, 0.2);
+        }
+        50% {
+            box-shadow:
+                0 0 0 4px rgba(3, 116, 181, 0.2),
+                0 0 16px 4px rgba(3, 116, 181, 0.3);
+        }
+    }
+
+    .dark {
+        @keyframes pulse-glow {
+            0%,
+            100% {
+                box-shadow:
+                    0 0 0 0 rgba(91, 179, 232, 0.4),
+                    0 0 8px 2px rgba(91, 179, 232, 0.2);
+            }
+            50% {
+                box-shadow:
+                    0 0 0 4px rgba(91, 179, 232, 0.2),
+                    0 0 16px 4px rgba(91, 179, 232, 0.3);
+            }
+        }
+    }
+
+    .animate-pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    /* ============================================================ */
+    /* Markdown/Rich Content Styling */
+    /* ============================================================ */
+
+    /* Code blocks - inline */
+    .question_text code,
+    .answer-text code,
+    .memorize-card-question code,
+    .memorize-answer-text code {
+        font-family: "Consolas", "Monaco", "Courier New", monospace;
+        @apply bg-muted px-1.5 py-0.5 rounded text-sm;
+    }
+
+    /* Code blocks - block */
+    .question_text pre,
+    .memorize-card-question pre {
+        @apply bg-muted p-4 rounded-lg overflow-x-auto my-4 text-sm;
+        font-family: "Consolas", "Monaco", "Courier New", monospace;
+    }
+
+    .question_text pre code,
+    .memorize-card-question pre code {
+        @apply bg-transparent p-0;
+    }
+
+    /* Tables */
+    .question_text table,
+    .memorize-card-question table {
+        @apply w-full border-collapse my-4;
+    }
+
+    .question_text th,
+    .question_text td,
+    .memorize-card-question th,
+    .memorize-card-question td {
+        @apply border border-border px-3 py-2 text-left;
+    }
+
+    .question_text th,
+    .memorize-card-question th {
+        @apply bg-muted font-semibold;
+    }
+
+    /* Lists */
+    .question_text ul,
+    .question_text ol,
+    .memorize-card-question ul,
+    .memorize-card-question ol {
+        @apply my-3 pl-6;
+    }
+
+    .question_text ul,
+    .memorize-card-question ul {
+        @apply list-disc;
+    }
+
+    .question_text ol,
+    .memorize-card-question ol {
+        @apply list-decimal;
+    }
+
+    .question_text li,
+    .memorize-card-question li {
+        @apply my-1;
+    }
+
+    /* Blockquote */
+    .question_text blockquote,
+    .memorize-card-question blockquote {
+        @apply border-l-4 border-primary my-4 pl-4 py-1 text-muted-foreground;
+    }
+
+    /* Dark mode code overrides */
+    .dark .question_text pre,
+    .dark .memorize-card-question pre {
+        @apply bg-secondary;
+    }
+
+    .dark .question_text code,
+    .dark .answer-text code,
+    .dark .memorize-card-question code,
+    .dark .memorize-answer-text code {
+        @apply bg-muted text-foreground;
+    }
+
+    .dark .question_text pre code,
+    .dark .memorize-card-question pre code {
+        @apply bg-transparent;
+    }
+
+    /* ============================================================ */
+    /* Fill-Blank Hint Styling */
+    /* ============================================================ */
+
+    .fill-blank-hint {
+        @apply mt-3 p-3 rounded-lg text-sm;
+        background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
+        border: 1px solid #e9d5ff;
+    }
+
+    .fill-blank-hint code {
+        @apply px-1.5 py-0.5 rounded font-mono text-xs;
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .dark .fill-blank-hint {
+        background: linear-gradient(135deg, #3b0764 0%, #4c1d5c 100%);
+        border-color: #6b21a8;
+    }
+
+    .dark .fill-blank-hint code {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Memorize mode blank placeholder (used in FlashCard for inline blanks) */
+    .memorize-blank-placeholder {
+        @apply inline-block w-12 border-b-2 border-current text-center mx-0.5;
+    }
+}
+
+/* ============================================================ */
+/* Responsive Design - Tailwind Breakpoints */
+/* ============================================================ */
+
+/* Tablet - md breakpoint (768px) */
+@media (max-width: 768px) {
+    .home-container {
+        @apply px-4 py-10;
+    }
+}
+
+/* Mobile - sm breakpoint (640px) */
+@media (max-width: 640px) {
+    body {
+        @apply text-[15px];
+    }
+
+    .quiz-item {
+        @apply flex-col text-center gap-3;
+    }
+
+    .quiz-item-actions {
+        @apply justify-center;
+    }
+
+    .home-title {
+        @apply text-3xl;
+    }
+
+    .home-header {
+        @apply flex-col gap-4;
+    }
+
+    .quiz-action-buttons {
+        @apply flex-col;
+    }
+}
+
+/* ============================================================ */
+/* Animated Background Effects */
+/* ============================================================ */
+
+@keyframes blob {
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(20px, -30px) scale(1.05);
+    }
+    50% {
+        transform: translate(-20px, 20px) scale(0.95);
+    }
+    75% {
+        transform: translate(30px, 10px) scale(1.02);
+    }
+}
+
+@keyframes blob-reverse {
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(-30px, 20px) scale(0.95);
+    }
+    50% {
+        transform: translate(20px, -20px) scale(1.05);
+    }
+    75% {
+        transform: translate(-10px, 30px) scale(0.98);
+    }
+}
+
+.animate-blob {
+    animation: blob 15s ease-in-out infinite;
+}
+
+.animate-blob-reverse {
+    animation: blob-reverse 18s ease-in-out infinite;
+}
+
+.animation-delay-1000 {
+    animation-delay: 1s;
+}
+
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+    animation-delay: 4s;
+}
+
+/* Noise texture overlay */
+.bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================ */
+/* Gamification Dashboard Animations */
+/* ============================================================ */
+
+/* Fire pulse animation for active streaks */
+@keyframes pulse-fire {
+    0%,
+    100% {
+        filter: drop-shadow(0 0 4px rgba(252, 90, 3, 0.4));
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 12px rgba(252, 90, 3, 0.8));
+        transform: scale(1.05);
+    }
+}
+
+.animate-pulse-fire {
+    animation: pulse-fire 2s ease-in-out infinite;
+}
+
+/* XP gain celebration pop */
+@keyframes xp-pop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-xp-pop {
+    animation: xp-pop 0.3s ease-out;
+}
+
+/* Activity bar grow animation */
+@keyframes grow-bar {
+    from {
+        transform: scaleY(0);
+        transform-origin: bottom;
+    }
+    to {
+        transform: scaleY(1);
+        transform-origin: bottom;
+    }
+}
+
+.animate-grow-bar {
+    animation: grow-bar 0.5s ease-out forwards;
+}
+
+/* ============================================================ */
+/* Toast (Sonner) Action Button Styling */
+/* ============================================================ */
+
+/* Style action buttons based on toast type */
+[data-sonner-toast][data-type="success"] [data-button] {
+    background-color: var(--success) !important;
+    color: var(--success-foreground) !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-button]:hover {
+    background-color: var(--success-hover) !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-button] {
+    background-color: var(--destructive) !important;
+    color: var(--destructive-foreground) !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-button]:hover {
+    background-color: var(--destructive-hover) !important;
+}
+
+[data-sonner-toast][data-type="warning"] [data-button] {
+    background-color: var(--warning) !important;
+    color: var(--warning-foreground) !important;
+}
+
+[data-sonner-toast][data-type="warning"] [data-button]:hover {
+    background-color: var(--warning-hover) !important;
+}
+
+[data-sonner-toast][data-type="info"] [data-button] {
+    background-color: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+}
+
+[data-sonner-toast][data-type="info"] [data-button]:hover {
+    background-color: var(--primary-hover) !important;
+}

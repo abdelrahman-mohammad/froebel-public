@@ -1,0 +1,20 @@
+# Folders
+node_modules
+.next
+dist
+build
+plans
+
+# Generated files
+package-lock.json
+tsconfig.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Assets
+public/**/*.svg
+public/**/*.png
+public/**/*.jpg

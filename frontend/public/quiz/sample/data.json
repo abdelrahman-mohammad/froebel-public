@@ -1,0 +1,81 @@
+{
+    "quiz": {
+        "title": "Sample Quiz",
+        "description": "A sample quiz to demonstrate Quiz Replay functionality",
+        "timeLimit": 5,
+        "questions": [
+            {
+                "type": "multiple_choice",
+                "text": "What is the capital of France?",
+                "points": 1,
+                "choices": [
+                    { "text": "London", "correct": false },
+                    { "text": "Paris", "correct": true },
+                    { "text": "Berlin", "correct": false },
+                    { "text": "Madrid", "correct": false }
+                ]
+            },
+            {
+                "type": "multiple_answer",
+                "text": "Which of the following are programming languages?",
+                "points": 2,
+                "choices": [
+                    { "text": "Python", "correct": true },
+                    { "text": "HTML", "correct": false },
+                    { "text": "JavaScript", "correct": true },
+                    { "text": "CSS", "correct": false },
+                    { "text": "Rust", "correct": true }
+                ]
+            },
+            {
+                "type": "true_false",
+                "text": "The Earth is flat.",
+                "points": 1,
+                "correct": false
+            },
+            {
+                "type": "fill_blank",
+                "text": "Complete the equation: 2 + 2 = {blank}",
+                "points": 1,
+                "answers": ["4"],
+                "inline": true
+            },
+            {
+                "type": "fill_blank",
+                "text": "What is the formula for water? H{blank}O",
+                "points": 1,
+                "answers": ["2"],
+                "inline": true,
+                "numeric": true
+            },
+            {
+                "type": "multiple_choice",
+                "text": "Which planet is known as the Red Planet?",
+                "points": 1,
+                "choices": [
+                    { "text": "Venus", "correct": false },
+                    { "text": "Mars", "correct": true },
+                    { "text": "Jupiter", "correct": false },
+                    { "text": "Saturn", "correct": false }
+                ]
+            },
+            {
+                "type": "true_false",
+                "text": "Water boils at 100°C at sea level.",
+                "points": 1,
+                "correct": true
+            },
+            {
+                "type": "multiple_choice",
+                "text": "What is $\\sqrt{16}$?",
+                "points": 1,
+                "choices": [
+                    { "text": "2", "correct": false },
+                    { "text": "4", "correct": true },
+                    { "text": "8", "correct": false },
+                    { "text": "16", "correct": false }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,90 @@
+.EditorTheme__code {
+    background-color: transparent;
+    font-family: Menlo, Consolas, Monaco, monospace;
+    display: block;
+    padding: 8px 8px 8px 52px;
+    line-height: 1.53;
+    font-size: 13px;
+    margin: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    overflow-x: auto;
+    position: relative;
+    border-radius: 8px;
+    tab-size: 2;
+    @apply border-border;
+}
+.EditorTheme__code:before {
+    content: attr(data-gutter);
+    position: absolute;
+    background-color: transparent;
+    left: 0;
+    top: 0;
+    padding: 8px;
+    white-space: pre-wrap;
+    text-align: right;
+    min-width: 25px;
+    @apply border-r border-border text-muted-foreground;
+}
+.EditorTheme__table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    overflow-y: scroll;
+    overflow-x: scroll;
+    table-layout: fixed;
+    width: fit-content;
+    width: 100%;
+    margin: 0px 0px 30px 0px;
+}
+.EditorTheme__tokenComment {
+    @apply text-slate-500 dark:text-slate-400;
+}
+.EditorTheme__tokenPunctuation {
+    @apply text-gray-500 dark:text-gray-400;
+}
+.EditorTheme__tokenProperty {
+    @apply text-pink-700 dark:text-pink-400;
+}
+.EditorTheme__tokenSelector {
+    @apply text-green-700 dark:text-green-400;
+}
+.EditorTheme__tokenOperator {
+    @apply text-amber-700 dark:text-amber-400;
+}
+.EditorTheme__tokenAttr {
+    @apply text-cyan-700 dark:text-cyan-400;
+}
+.EditorTheme__tokenVariable {
+    @apply text-orange-600 dark:text-orange-400;
+}
+.EditorTheme__tokenFunction {
+    @apply text-rose-600 dark:text-rose-400;
+}
+
+.Collapsible__container {
+    background-color: var(--background);
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    @apply border border-border;
+}
+
+.Collapsible__title {
+    padding: 0.25rem;
+    padding-left: 1rem;
+    position: relative;
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+    list-style-type: disclosure-closed;
+    list-style-position: inside;
+}
+
+.Collapsible__title p {
+    display: inline-flex;
+}
+.Collapsible__title::marker {
+    @apply text-muted-foreground;
+}
+.Collapsible__container[open] > .Collapsible__title {
+    list-style-type: disclosure-open;
+}
